@@ -9,12 +9,12 @@
 import UIKit
 
 public enum SC_ScaledPattern {
-    case HorizontalCenter
-    case HorizontalLeft
-    case HorizontalRight
-    case VerticalCenter
-    case VerticalBottom
-    case VerticalTop
+    case horizontalCenter
+    case horizontalLeft
+    case horizontalRight
+    case verticalCenter
+    case verticalBottom
+    case verticalTop
 }
 
 public class ScaledVisibleCellsCollectionView {
@@ -26,7 +26,7 @@ public class ScaledVisibleCellsCollectionView {
     var maxAlpha: CGFloat = 1.0
     var minAlpha: CGFloat = 0.5
     
-    var scaledPattern: SC_ScaledPattern = .VerticalCenter
+    var scaledPattern: SC_ScaledPattern = .verticalCenter
 }
 
 extension UICollectionView {
@@ -47,11 +47,11 @@ extension UICollectionView {
     */
     public func scaledVisibleCells() {
         switch ScaledVisibleCellsCollectionView.sharedInstance.scaledPattern {
-        case .HorizontalCenter, .HorizontalLeft, .HorizontalRight:
-            scaleCellsForHorizontalScroll(visibleCells())
+        case .horizontalCenter, .horizontalLeft, .horizontalRight:
+            scaleCellsForHorizontalScroll(visibleCells: visibleCells)
             break
-        case .VerticalCenter, .VerticalTop, .VerticalBottom:
-            self.scaleCellsForVerticalScroll(visibleCells())
+        case .verticalCenter, .verticalTop, .verticalBottom:
+            self.scaleCellsForVerticalScroll(visibleCells: visibleCells)
             break
         }
     }
@@ -68,22 +68,22 @@ extension UICollectionView {
             var distanceFromMainPosition: CGFloat = 0
             
             switch ScaledVisibleCellsCollectionView.sharedInstance.scaledPattern {
-            case .HorizontalCenter:
-                distanceFromMainPosition = horizontalCenter(cell)
+            case .horizontalCenter:
+                distanceFromMainPosition = horizontalCenter(cell: cell)
                 break
-            case .HorizontalLeft:
+            case .horizontalLeft:
                 distanceFromMainPosition = abs(cell.frame.midX - contentOffset.x - (cell.bounds.width / 2))
                 break
-            case .HorizontalRight:
+            case .horizontalRight:
                 distanceFromMainPosition = abs(bounds.width / 2 - (cell.frame.midX - contentOffset.x) + (cell.bounds.width / 2))
                 break
             default:
                 return
             }
-            let preferredAry = scaleCells(distanceFromMainPosition, maximumScalingArea: maximumScalingAreaWidth, scalingArea: scalingAreaWidth)
+            let preferredAry = scaleCells(distanceFromMainPosition: distanceFromMainPosition, maximumScalingArea: maximumScalingAreaWidth, scalingArea: scalingAreaWidth)
             let preferredScale = preferredAry[0]
             let preferredAlpha = preferredAry[1]
-            cell.transform = CGAffineTransformMakeScale(preferredScale, preferredScale)
+            cell.transform = CGAffineTransform(scaleX: preferredScale, y: preferredScale)
             cell.alpha = preferredAlpha
         }
     }
@@ -97,23 +97,23 @@ extension UICollectionView {
             var distanceFromMainPosition: CGFloat = 0
             
             switch ScaledVisibleCellsCollectionView.sharedInstance.scaledPattern {
-            case .VerticalCenter:
-                distanceFromMainPosition = verticalCenter(cell)
+            case .verticalCenter:
+                distanceFromMainPosition = verticalCenter(cell: cell)
                 break
-            case .VerticalBottom:
+            case .verticalBottom:
                 distanceFromMainPosition = abs(bounds.height - (cell.frame.midY - contentOffset.y + (cell.bounds.height / 2)))
                 break
-            case .VerticalTop:
+            case .verticalTop:
                 distanceFromMainPosition = abs(cell.frame.midY - contentOffset.y - (cell.bounds.height / 2))
                 break
             default:
                 return
             }
-            let preferredAry = scaleCells(distanceFromMainPosition, maximumScalingArea: maximumScalingAreaHeight, scalingArea: scalingAreaHeight)
+            let preferredAry = scaleCells(distanceFromMainPosition: distanceFromMainPosition, maximumScalingArea: maximumScalingAreaHeight, scalingArea: scalingAreaHeight)
             let preferredScale = preferredAry[0]
             let preferredAlpha = preferredAry[1]
             
-            cell.transform = CGAffineTransformMakeScale(preferredScale, preferredScale)
+            cell.transform = CGAffineTransform(scaleX: preferredScale, y: preferredScale)
             cell.alpha = preferredAlpha
         }
     }

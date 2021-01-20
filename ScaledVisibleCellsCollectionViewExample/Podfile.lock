@@ -6,9 +6,11 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   ScaledVisibleCellsCollectionView:
-    :path: ../
+    :path: "../"
 
 SPEC CHECKSUMS:
   ScaledVisibleCellsCollectionView: 51925cc9b392e572a94e010843e0e349d1f399ac
 
-COCOAPODS: 0.38.2
+PODFILE CHECKSUM: 6a074e72d7cdd8f82d6add88e6a3a33ac143564e
+
+COCOAPODS: 1.10.0
